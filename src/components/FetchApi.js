@@ -30,16 +30,13 @@ useEffect(() =>{
 
             <div>
                 <ul>
-                    {data.map(item => 
-                    <li>{item.title}</li>
-                    )}
+                    {data.map((item =>
+                        <li>{item.type}</li>
+                    ))}
                 </ul>
             </div>
-            
-            
-
-            </div>
-        )
+         </div>
+        );
 
 }
 
