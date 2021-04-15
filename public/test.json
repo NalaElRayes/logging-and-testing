@@ -1,0 +1,6 @@
+
+    {
+      "type": "cy:command",
+      "severity": "success",
+      "message": "wait\t1000"
+    }
