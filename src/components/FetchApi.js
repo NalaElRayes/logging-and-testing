@@ -5,7 +5,7 @@ function FetchAPI (){
 const [data, setData] = useState([]);
     
 const apiGet = () => {
-fetch('./test.json')
+fetch('./data.json')
   .then(response => response.json())
   .then((json) => {
     console.log(json);
@@ -22,20 +22,19 @@ useEffect(() =>{
 
     return (
             <div>
-                My API <br />
-
             <button onClick={apiGet}>Fetch API</button>
             <br /> 
-            {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
+            <pre>{JSON.stringify(data, null, 2)}</pre>
 
-            <div>
+            {/* <div>
                 <ul>
                     {data.map((item =>
-                        <li>{item.type}</li>
+                        <li><h4>Type:</h4> {item.type} <h4>Message:</h4> {item.message} <h4>Severity:</h4> {item.severity}</li>
+                        
                     ))}
                 </ul>
-            </div>
-         </div>
+            </div> */}
+         </div> 
         );
 
 }

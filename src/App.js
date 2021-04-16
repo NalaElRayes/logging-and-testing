@@ -8,8 +8,9 @@ import FetchAPI from './components/FetchApi';
 function App() {
   return (
     <div className="App">
-      <FetchAPI></FetchAPI>
       <Typography>Hello</Typography>
+      <FetchAPI></FetchAPI>
+      
       
     </div>
   );
