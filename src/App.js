@@ -1,14 +1,14 @@
 import './App.css';
 import 'fontsource-roboto'; 
 import { Typography } from '@material-ui/core';
-import FetchAPI from './components/FetchApi';
+import Index from './components/Index';
 
 
 
 function App() {
   return (
     <div className="App">
-      <FetchAPI></FetchAPI>
+      <Index></Index>
       
       
     </div>
