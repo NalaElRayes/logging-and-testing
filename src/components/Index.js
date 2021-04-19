@@ -1,6 +1,7 @@
 import React, {useEffect, useState}from 'react'
-
-//Material Ui table import
+import {useApiGet} from '../hooks/useApiGet'
+import {useStyles, StyledTableCell, StyledTableRow } from '../styles/styles'
+// Material Ui table import
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -11,58 +12,59 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 //Table Ui
-const StyledTableCell = withStyles((theme) => ({
-    head: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
-    },
-    body: {
-      fontSize: 14,
-    },
-  }))(TableCell);
+// const StyledTableCell = withStyles((theme) => ({
+//     head: {
+//       backgroundColor: theme.palette.common.black,
+//       color: theme.palette.common.white,
+//     },
+//     body: {
+//       fontSize: 14,
+//     },
+//   }))(TableCell);
   
-  const StyledTableRow = withStyles((theme) => ({
-    root: {
-      '&:nth-of-type(odd)': {
-        backgroundColor: theme.palette.action.hover,
-      },
-    },
-  }))(TableRow);
+//   const StyledTableRow = withStyles((theme) => ({
+//     root: {
+//       '&:nth-of-type(odd)': {
+//         backgroundColor: theme.palette.action.hover,
+//       },
+//     },
+//   }))(TableRow);
 
-  const useStyles = makeStyles({
-    table: {
-      minWidth: 700,
-    },
-  });
+//   const useStyles = makeStyles({
+//     table: {
+//       minWidth: 700,
+//     },
+//   });
 
-function FetchAPI (){
+function Index (){
 
 const classes = useStyles();
-const [data, setData] = useState([]);
+// const [data, setData] = useState([]);
 const [search, setSearch] = useState(""); 
+const data = useApiGet();
     
-const apiGet = () => {
-fetch('./test.json')
-  .then(response => response.json())
-  .then((json) => {
-    console.log(json);
-    setData(json);
-  });
+// const apiGet = () => {
+// fetch('./test.json')
+//   .then(response => response.json())
+//   .then((json) => {
+//     console.log(json);
+//     setData(json);
+//   });
 
-};
+// };
 
 
-useEffect(() =>{
-    apiGet();
-  }, []);
+// useEffect(() =>{
+//     apiGet();
+//   }, []);
 
 
 
     return (
              <div>
-            {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
+            
 
-           
+                <div>
                 <h4>lets the first user write a message in the first conversation</h4>
                  
                  {/*Search field*/}
@@ -71,7 +73,7 @@ useEffect(() =>{
                  }}>
                  </input>
 
-            
+                 </div>
 
                     <TableContainer component={Paper}>
                         <Table className={classes.table} aria-label="customized table">
@@ -79,7 +81,7 @@ useEffect(() =>{
                             <TableRow>
                                 <StyledTableCell>Type</StyledTableCell>
                                 <StyledTableCell align="right">Severity</StyledTableCell>
-                                <StyledTableCell align="right">Message</StyledTableCell>
+                                <StyledTableCell align="left">Message</StyledTableCell>
                                 
                             </TableRow>
                             </TableHead>
@@ -94,12 +96,12 @@ useEffect(() =>{
                                 })
                                 .map((item)  =>{
                                     return (
-                                        <StyledTableRow>
+                                        <StyledTableRow >
                                         <StyledTableCell component="th" scope="row">
                                             {item.type}
                                         </StyledTableCell>
                                         <StyledTableCell align="right">{item.severity}</StyledTableCell>
-                                        <StyledTableCell align="right">{item.message}</StyledTableCell>
+                                        <StyledTableCell align="left">{item.message}</StyledTableCell>
                                         </StyledTableRow>
                                     ); 
                                     })}
@@ -116,5 +118,5 @@ useEffect(() =>{
 
 }
 
-export default FetchAPI
+export default Index
 
