@@ -1,6 +1,6 @@
-import React, {useEffect, useState}from 'react'
-import {useApiGet} from '../hooks/useApiGet'
-import {useStyles, StyledTableCell, StyledTableRow } from '../styles/styles'
+import React, { useEffect, useState } from 'react'
+import { useApiGet } from '../hooks/useApiGet'
+import { useStyles, StyledTableCell, StyledTableRow } from '../styles/styles'
 // Material Ui table import
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -21,7 +21,7 @@ import Paper from '@material-ui/core/Paper';
 //       fontSize: 14,
 //     },
 //   }))(TableCell);
-  
+
 //   const StyledTableRow = withStyles((theme) => ({
 //     root: {
 //       '&:nth-of-type(odd)': {
@@ -36,87 +36,104 @@ import Paper from '@material-ui/core/Paper';
 //     },
 //   });
 
-function Index (){
+function Index() {
 
-const classes = useStyles();
-// const [data, setData] = useState([]);
-const [search, setSearch] = useState(""); 
-const data = useApiGet();
-    
-// const apiGet = () => {
-// fetch('./test.json')
-//   .then(response => response.json())
-//   .then((json) => {
-//     console.log(json);
-//     setData(json);
-//   });
+  const classes = useStyles();
+  // const [data, setData] = useState([]);
+  const [search, setSearch] = useState("");
+  const data = useApiGet();
+  const [filteredData, setFilteredData] = useState([]);
 
-// };
+  // const apiGet = () => {
+  // fetch('./test.json')
+  //   .then(response => response.json())
+  //   .then((json) => {
+  //     console.log(json);
+  //     setData(json);
+  //   });
 
-
-// useEffect(() =>{
-//     apiGet();
-//   }, []);
+  // };
 
 
+  useEffect(() => {
+    setFilteredData(data);
+  }, [data]);
 
-    return (
-             <div>
-            
+  const filterSearch = (search) => {
 
-                <div>
-                <h4>lets the first user write a message in the first conversation</h4>
-                 
-                 {/*Search field*/}
-                 <input type ="text" placeholder="search here" onChange= {e=>{
-                     setSearch(e.target.value)
-                 }}>
-                 </input>
+    setFilteredData(data.filter((item) => {
+      if (search == "") {
+        return item;
+      } else if (item.message.toLowerCase().includes(search.toLowerCase())) {
+        return item;
+      }
+    }))
+  }
 
-                 </div>
 
-                    <TableContainer component={Paper}>
-                        <Table className={classes.table} aria-label="customized table">
-                            <TableHead>
-                            <TableRow>
-                                <StyledTableCell>Type</StyledTableCell>
-                                <StyledTableCell align="right">Severity</StyledTableCell>
-                                <StyledTableCell align="left">Message</StyledTableCell>
-                                
-                            </TableRow>
-                            </TableHead>
-                            <TableBody>
-                            {data
-                                .filter((item)=>{
-                                    if (search == ""){
-                                        return item;
-                                    }else if (item.message.toLowerCase().includes(search.toLowerCase())){
-                                        return item;
-                                    }
-                                })
-                                .map((item)  =>{
-                                    return (
-                                        <StyledTableRow >
-                                        <StyledTableCell component="th" scope="row">
-                                            {item.type}
-                                        </StyledTableCell>
-                                        <StyledTableCell align="right">{item.severity}</StyledTableCell>
-                                        <StyledTableCell align="left">{item.message}</StyledTableCell>
-                                        </StyledTableRow>
-                                    ); 
-                                    })}
-                                
-                         
-                            </TableBody>
-                        </Table>
-                        </TableContainer>
 
-                
-           
-         </div> 
-        );
+  return (
+    <div>
+
+
+      <div>
+        <h4>lets the first user write a message in the first conversation</h4>
+
+        {/*Search field*/}
+        <input type="text" placeholder="search here" onChange={e => {
+          filterSearch(e.target.value)
+        }}>
+        </input>
+
+      </div>
+
+      <TableContainer component={Paper}>
+        <Table className={classes.table} aria-label="customized table">
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>Type</StyledTableCell>
+              <StyledTableCell align="right">Severity</StyledTableCell>
+              <StyledTableCell align="left">Message</StyledTableCell>
+
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {filteredData
+              .map((item, b) => {
+                let color
+                switch (item.severity) {
+                  case "success":
+                    color = "green"
+                    break;
+                  case "warning":
+                    color = "yellow"
+                    break;
+                  default:
+                    color = "red"
+                }
+                return (
+                  <StyledTableRow key={b} style={{ backgroundColor: color }}>
+                    <StyledTableCell component="th" scope="row">
+                      {item.type}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">{item.severity}</StyledTableCell>
+                    <StyledTableCell align="left">{item.message}</StyledTableCell>
+                  </StyledTableRow>
+                );
+              })}
+
+
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+
+
+    </div>
+  );
 
 }
+// style = {{backgroundColor: item.severity === "success" ? "green" : item.severity === "warning" ?  "yellow" : "red" }}  
 
 export default Index
 
