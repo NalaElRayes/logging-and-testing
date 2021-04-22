@@ -3,11 +3,6 @@ import { withStyles, makeStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
-
-
-
-
-
 //Table styles
 export const StyledTableCell = withStyles((theme) => ({
     head: {
