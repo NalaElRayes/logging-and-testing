@@ -22,8 +22,10 @@ export const StyledTableCell = withStyles((theme) => ({
     },
   }))(TableRow);
 
+  
+
   export const useStyles = makeStyles({
     table: {
-      minWidth: 700,
+      minWidth: 650,
     },
   });

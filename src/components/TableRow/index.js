@@ -7,7 +7,9 @@ import { StyledTableRow, StyledTableCell } from './styles';
 
 const TableRowComponent = ({ severity, message, type, color, ...rest }) => {
     
-    return (<StyledTableRow style={{ backgroundColor: color }} {...rest}>
+    return (
+    
+    <StyledTableRow style={{ backgroundColor: color }} {...rest}>
     <StyledTableCell component="th" scope="row">
       {type}
     </StyledTableCell>
