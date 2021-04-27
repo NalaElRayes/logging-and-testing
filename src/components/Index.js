@@ -8,11 +8,9 @@ import TableBody from '@material-ui/core/TableBody';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-
-//Radio button import
-
 import TableRowComponent from './TableRow';
 import { getColor } from './TableRow/utils';
+
 import { Checkbox, Grid, Typography } from '@material-ui/core';
 
 
@@ -53,13 +51,16 @@ function Index() {
     // after that we apply the checkbox filters
     if (appliedFilter.length > 0) {
       // if there is anything to apply (at least one checkbox is checked)
-      setFilteredData(searchResults.filter((item) => appliedFilter.includes(item.severity)))
-    } else {
+      setFilteredData(searchResults.filter((item) => 
+      appliedFilter.includes(item.type) || appliedFilter.includes(item.severity)))
+
+      
+    }else{
       // or just set the filteredData state to searchResults if there are no checkboxes checked
       setFilteredData(searchResults)
     }
   }
-
+  
   const applyFilter = (filter) => {
     // we set the appliedFilter state to whatever it is plus the checkbox that was checked
     setAppliedFilter(old => [...old, filter])
@@ -78,18 +79,21 @@ function Index() {
           onChange for the checkboxes(ternary operator):
           if the checkbox gets activated it calls on the applyFilter() with event target value
           otherwise it calls on the removeFilter() with event target value 
-          either way the appliedFilter state gets changed hence the second useEffect (filterSearch function) gets triggered 
+          either way the appliedFilter state gets changed hence the second useEffect (iflterSearch function) gets triggered 
           and filteredData gets updated
           */}
-          <label>error</label><Checkbox value='error' color="primary" onChange={(e, checked) => checked ? applyFilter(e.target.value) : removeFilter(e.target.value)}></Checkbox>
-          <label>warning</label><Checkbox value='warning' color="primary" onChange={(e, checked) => checked ? applyFilter(e.target.value) : removeFilter(e.target.value)}></Checkbox>
-          <label>info</label><Checkbox value='success' color="primary" onChange={(e, checked) => checked ? applyFilter(e.target.value) : removeFilter(e.target.value)}></Checkbox>
+          <label>errors</label><Checkbox value='error' color="primary" onChange={(e, checked) => checked ? applyFilter(e.target.value) : removeFilter(e.target.value)}></Checkbox>
+          <label>warnings</label><Checkbox value='warning' color="primary" onChange={(e, checked) => checked ? applyFilter(e.target.value) : removeFilter(e.target.value)}></Checkbox>
+          <label>successes</label><Checkbox value='success' color="primary" onChange={(e, checked) => checked ? applyFilter(e.target.value) : removeFilter(e.target.value)}></Checkbox>
           {/* 
           onChange for the search field:
           search state gets changed and therefore the second useEffect (filterSearch function) gets triggered 
           and filteredData gets updated
           */}
           <input type="text" placeholder="search here" onChange={e => setSearch(e.target.value)} />
+
+          <label>cy</label><Checkbox value="cy:xhr" color="primary" onChange={(e, checked) => checked ? applyFilter(e.target.value) : removeFilter(e.target.value)}></Checkbox>
+          <label>info</label><Checkbox value="cons:info" color="primary" onChange={(e, checked) => checked ? applyFilter(e.target.value) : removeFilter(e.target.value)}></Checkbox>
         </Grid>
 
         <Grid item xs={12} className="tableBody">
