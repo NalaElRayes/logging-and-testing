@@ -6,13 +6,13 @@ export const getColor = ({ type }) => {
 
   switch (type) {
     case "cons:info":
-      return "blue"
+      return "#87CEFA"
     case "cons:warn":
       return "yellow"
     case "cons:error":
-      return "red"
+      return "#ff000080"
     case "cons:fatal":
-      return "red"
+      return "#ff000080"
     default:
       return ""
   }

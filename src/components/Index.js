@@ -16,11 +16,14 @@ import { Checkbox, Grid, Typography } from '@material-ui/core';
 
 
 function Index() {
+
   const classes = useStyles();
   const data = useApiGet();
   const [search, setSearch] = useState("");
   const [filteredData, setFilteredData] = useState([]);
-  const [appliedFilter, setAppliedFilter] = useState([]);
+  const [appliedFilter, setAppliedFilter] = useState(["warning", "error", "success"]);
+  const [appliedFilterType, setAppliedFilterType] = useState(["cy:", "cons:"]);
+
 
   useEffect(() => {
     // this function runs whenever const data is changed
@@ -29,46 +32,58 @@ function Index() {
   }, [data]);
 
   useEffect(() => {
-    // whenever there is a change in appliedFilter state (a checkbox is clicked) 
+    // whenever there is a change in appliedFilter or appliedFilterType state (checkbox is clicked) 
     // or when there is a change in search state (something is written/deleted in search input)
     // this function runs
     filterSearch(search)
-  }, [appliedFilter, search]);
+  }, [appliedFilter, appliedFilterType, search]);
 
   const filterSearch = (search) => {
     // first we filter data according to what is written in search input
-    let searchResults = data.filter((item) => {
-      if (search === "") { 
-        return item;
-      } else if (item.type.toLowerCase().includes(search.toLowerCase())) {
-        return item;
-      } else if (item.message.toLowerCase().includes(search.toLowerCase())) {
-        return item;
-      } else if (item.severity.toLowerCase().includes(search.toLowerCase())) {
-        return item;
-      }
-    })
-    // after that we apply the checkbox filters
-    if (appliedFilter.length > 0) {
-      // if there is anything to apply (at least one checkbox is checked)
-      setFilteredData(searchResults.filter((item) => 
-      appliedFilter.includes(item.type) || appliedFilter.includes(item.severity)))
+    let searchResults = data;
 
-      
-    }else{
-      // or just set the filteredData state to searchResults if there are no checkboxes checked
-      setFilteredData(searchResults)
+    if (search !== "") {
+      searchResults = searchResults.filter((item) => {
+
+        if (item.type.toLowerCase().includes(search.toLowerCase())) {
+          return item;
+        } else if (item.message.toLowerCase().includes(search.toLowerCase())) {
+          return item;
+        } else if (item.severity.toLowerCase().includes(search.toLowerCase())) {
+          return item;
+        }
+      })
     }
+    // after that we apply the checkbox filters
+    setFilteredData(searchResults.filter((item) =>
+
+
+      appliedFilter.includes(item.severity))
+      .filter((item) =>
+
+        appliedFilterType.some(filterType =>
+          item.type.startsWith(filterType)
+        )))
   }
-  
+
   const applyFilter = (filter) => {
-    // we set the appliedFilter state to whatever it is plus the checkbox that was checked
+    // we set the appliedFilter state to whatever it is plus the value from the checkbox that was checked
     setAppliedFilter(old => [...old, filter])
   }
 
   const removeFilter = (filter) => {
     // we set the appliedFilter state to whatever it is minus the checkbox that was checked
     setAppliedFilter(old => [...old.filter((value) => value !== filter)])
+  }
+
+  const applyFilterType = (filter) => {
+    // we set the appliedFilterType state to whatever it is plus the value from the checkbox that was checked
+    setAppliedFilterType(old => [...old, filter])
+  }
+
+  const removeFilterType = (filter) => {
+    // we set the appliedFilterType state to whatever it is minus the checkbox that was checked
+    setAppliedFilterType(old => [...old.filter((value) => value !== filter)])
   }
 
   return (
@@ -82,9 +97,9 @@ function Index() {
           either way the appliedFilter state gets changed hence the second useEffect (iflterSearch function) gets triggered 
           and filteredData gets updated
           */}
-          <label>errors</label><Checkbox value='error' color="primary" onChange={(e, checked) => checked ? applyFilter(e.target.value) : removeFilter(e.target.value)}></Checkbox>
-          <label>warnings</label><Checkbox value='warning' color="primary" onChange={(e, checked) => checked ? applyFilter(e.target.value) : removeFilter(e.target.value)}></Checkbox>
-          <label>successes</label><Checkbox value='success' color="primary" onChange={(e, checked) => checked ? applyFilter(e.target.value) : removeFilter(e.target.value)}></Checkbox>
+          <label>errors</label><Checkbox value='error' checked={appliedFilter.includes("error")} color="primary" onChange={(e, checked) => checked ? applyFilter(e.target.value) : removeFilter(e.target.value)}></Checkbox>
+          <label>warnings</label><Checkbox value='warning' checked={appliedFilter.includes("warning")} color="primary" onChange={(e, checked) => checked ? applyFilter(e.target.value) : removeFilter(e.target.value)}></Checkbox>
+          <label>successes</label><Checkbox value='success' checked={appliedFilter.includes("success")} color="primary" onChange={(e, checked) => checked ? applyFilter(e.target.value) : removeFilter(e.target.value)}></Checkbox>
           {/* 
           onChange for the search field:
           search state gets changed and therefore the second useEffect (filterSearch function) gets triggered 
@@ -92,8 +107,8 @@ function Index() {
           */}
           <input type="text" placeholder="search here" onChange={e => setSearch(e.target.value)} />
 
-          <label>cy</label><Checkbox value="cy:xhr" color="primary" onChange={(e, checked) => checked ? applyFilter(e.target.value) : removeFilter(e.target.value)}></Checkbox>
-          <label>info</label><Checkbox value="cons:info" color="primary" onChange={(e, checked) => checked ? applyFilter(e.target.value) : removeFilter(e.target.value)}></Checkbox>
+          <label>cy</label><Checkbox value="cy:" color="primary" checked={appliedFilterType.includes("cy:")} onChange={(e, checked) => checked ? applyFilterType(e.target.value) : removeFilterType(e.target.value)}></Checkbox>
+          <label>cons</label><Checkbox value="cons:" color="primary" checked={appliedFilterType.includes("cons:")} onChange={(e, checked) => checked ? applyFilterType(e.target.value) : removeFilterType(e.target.value)}></Checkbox>
         </Grid>
 
         <Grid item xs={12} className="tableBody">

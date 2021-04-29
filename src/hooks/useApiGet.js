@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 
 export const useApiGet = () => {
-    
+
     const [data, setData] = useState([]);
 
     const apiGet = () => {
