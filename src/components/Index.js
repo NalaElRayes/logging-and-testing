@@ -45,11 +45,9 @@ function Index() {
     if (search !== "") {
       searchResults = searchResults.filter((item) => {
 
-        if (item.type.toLowerCase().includes(search.toLowerCase())) {
-          return item;
-        } else if (item.message.toLowerCase().includes(search.toLowerCase())) {
-          return item;
-        } else if (item.severity.toLowerCase().includes(search.toLowerCase())) {
+        if (item.type.toLowerCase().includes(search.toLowerCase())
+          || item.message.toLowerCase().includes(search.toLowerCase())
+          || item.severity.toLowerCase().includes(search.toLowerCase())) {
           return item;
         }
       })

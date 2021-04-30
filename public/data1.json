@@ -1,6 +1,5 @@
-{
-    "cypress/integration/basic.spec.js": {
-      "Displays page title": [
+
+[
         {
           "type": "cy:command",
           "severity": "success",
@@ -495,9 +494,7 @@
           "type": "cy:xhr",
           "severity": "success",
           "message": "POST https://5jcqbbxp.api.sanity.io/v1/data/query/prod"
-        }
-      ],
-      "Displays page description": [
+        },
         {
           "type": "cy:command",
           "severity": "success",
@@ -518,6 +515,5 @@
           "severity": "error",
           "message": "assert\texpected **[data-test-id=\"faq-category-wrapper\"]** to be **visible**"
         }
-      ]
-    }
-  }
+]
+    
