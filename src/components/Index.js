@@ -126,9 +126,9 @@ function Index() {
             </TableHead>
             <TableBody>
               {filteredData
-                .map((item, b) => {
+                .map((item, index) => {
                   return (
-                    <TableRowComponent key={b} type={item.type} severity={item.severity} message={item.message} color={getColor(item)} />
+                    <TableRowComponent key={index} type={item.type} severity={item.severity} message={item.message} color={getColor(item)} />
                   );
                 })}
             </TableBody>
