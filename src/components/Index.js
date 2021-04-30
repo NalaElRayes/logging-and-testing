@@ -1,6 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { useApiGet } from '../hooks/useApiGet'
+import { useStyles, StyledTableCell } from '../styles/styles'
+
+// Material Ui table import
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+
+import TableRowComponent from './TableRow';
+import { getColor } from './TableRow/utils';
+
+import { Checkbox, Grid, Typography } from '@material-ui/core';
 import { useStyles, StyledTableCell, StyledTableRow } from '../styles/styles'
+
 // Material Ui table import
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -11,129 +24,128 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
-//Table Ui
-// const StyledTableCell = withStyles((theme) => ({
-//     head: {
-//       backgroundColor: theme.palette.common.black,
-//       color: theme.palette.common.white,
-//     },
-//     body: {
-//       fontSize: 14,
-//     },
-//   }))(TableCell);
-
-//   const StyledTableRow = withStyles((theme) => ({
-//     root: {
-//       '&:nth-of-type(odd)': {
-//         backgroundColor: theme.palette.action.hover,
-//       },
-//     },
-//   }))(TableRow);
-
-//   const useStyles = makeStyles({
-//     table: {
-//       minWidth: 700,
-//     },
-//   });
-
 function Index() {
 
   const classes = useStyles();
-  // const [data, setData] = useState([]);
-  const [search, setSearch] = useState("");
   const data = useApiGet();
+  const [search, setSearch] = useState("");
   const [filteredData, setFilteredData] = useState([]);
-
-  // const apiGet = () => {
-  // fetch('./test.json')
-  //   .then(response => response.json())
-  //   .then((json) => {
-  //     console.log(json);
-  //     setData(json);
-  //   });
-
-  // };
+  const [appliedFilter, setAppliedFilter] = useState(["warning", "error", "success"]);
+  const [appliedFilterType, setAppliedFilterType] = useState(["cy:", "cons:"]);
 
 
   useEffect(() => {
-    setFilteredData(data);
+    // this function runs whenever const data is changed
+    // (useApiGet() has done its job and data is set to the fetched json)
+    setFilteredData(data)
   }, [data]);
 
-  const filterSearch = (search) => {
+  useEffect(() => {
+    // whenever there is a change in appliedFilter or appliedFilterType state (checkbox is clicked) 
+    // or when there is a change in search state (something is written/deleted in search input)
+    // this function runs
+    filterSearch(search)
+  }, [appliedFilter, appliedFilterType, search]);
 
-    setFilteredData(data.filter((item) => {
-      if (search == "") {
-        return item;
-      } else if (item.message.toLowerCase().includes(search.toLowerCase())) {
-        return item;
-      }
-    }))
+  const filterSearch = (search) => {
+    // first we filter data according to what is written in search input
+    let searchResults = data;
+
+    if (search !== "") {
+      searchResults = searchResults.filter((item) => {
+
+        if (item.type.toLowerCase().includes(search.toLowerCase())
+          || item.message.toLowerCase().includes(search.toLowerCase())
+          || item.severity.toLowerCase().includes(search.toLowerCase())) {
+          return item;
+        }
+      })
+    }
+    // after that we apply the checkbox filters
+    setFilteredData(searchResults.filter((item) =>
+
+
+      appliedFilter.includes(item.severity))
+      .filter((item) =>
+
+        appliedFilterType.some(filterType =>
+          item.type.startsWith(filterType)
+        )))
   }
 
+  const applyFilter = (filter) => {
+    // we set the appliedFilter state to whatever it is plus the value from the checkbox that was checked
+    setAppliedFilter(old => [...old, filter])
+  }
 
+  const removeFilter = (filter) => {
+    // we set the appliedFilter state to whatever it is minus the checkbox that was checked
+    setAppliedFilter(old => [...old.filter((value) => value !== filter)])
+  }
+
+  const applyFilterType = (filter) => {
+    // we set the appliedFilterType state to whatever it is plus the value from the checkbox that was checked
+    setAppliedFilterType(old => [...old, filter])
+  }
+
+  const removeFilterType = (filter) => {
+    // we set the appliedFilterType state to whatever it is minus the checkbox that was checked
+    setAppliedFilterType(old => [...old.filter((value) => value !== filter)])
+  }
 
   return (
     <div>
+      <Grid container spacing={1} className="tableContainer">
+        <Grid item xs={12}>
+          {/* 
+          onChange for the checkboxes(ternary operator):
+          if the checkbox gets activated it calls on the applyFilter() with event target value
+          otherwise it calls on the removeFilter() with event target value 
+          either way the appliedFilter state gets changed hence the second useEffect (iflterSearch function) gets triggered 
+          and filteredData gets updated
+          */}
+          <label>errors</label><Checkbox value='error' checked={appliedFilter.includes("error")} color="primary" onChange={(e, checked) => checked ? applyFilter(e.target.value) : removeFilter(e.target.value)}></Checkbox>
+          <label>warnings</label><Checkbox value='warning' checked={appliedFilter.includes("warning")} color="primary" onChange={(e, checked) => checked ? applyFilter(e.target.value) : removeFilter(e.target.value)}></Checkbox>
+          <label>successes</label><Checkbox value='success' checked={appliedFilter.includes("success")} color="primary" onChange={(e, checked) => checked ? applyFilter(e.target.value) : removeFilter(e.target.value)}></Checkbox>
+          {/* 
+          onChange for the search field:
+          search state gets changed and therefore the second useEffect (filterSearch function) gets triggered 
+          and filteredData gets updated
+          */}
+          <input type="text" placeholder="search here" onChange={e => setSearch(e.target.value)} />
 
+          <label>cy</label><Checkbox value="cy:" color="primary" checked={appliedFilterType.includes("cy:")} onChange={(e, checked) => checked ? applyFilterType(e.target.value) : removeFilterType(e.target.value)}></Checkbox>
+          <label>cons</label><Checkbox value="cons:" color="primary" checked={appliedFilterType.includes("cons:")} onChange={(e, checked) => checked ? applyFilterType(e.target.value) : removeFilterType(e.target.value)}></Checkbox>
+        </Grid>
 
-      <div>
-        <h4>lets the first user write a message in the first conversation</h4>
-
-        {/*Search field*/}
-        <input type="text" placeholder="search here" onChange={e => {
-          filterSearch(e.target.value)
-        }}>
-        </input>
-
-      </div>
-
-      <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label="customized table">
-          <TableHead>
+        <Grid item xs={12} className="tableBody">
+          <TableHead >
             <TableRow>
-              <StyledTableCell>Type</StyledTableCell>
-              <StyledTableCell align="right">Severity</StyledTableCell>
-              <StyledTableCell align="left">Message</StyledTableCell>
+              <Typography variant="h6">lets the first user create a conversation</Typography>
 
             </TableRow>
           </TableHead>
-          <TableBody>
-            {filteredData
-              .map((item, b) => {
-                let color
-                switch (item.severity) {
-                  case "success":
-                    color = "green"
-                    break;
-                  case "warning":
-                    color = "yellow"
-                    break;
-                  default:
-                    color = "red"
-                }
-                return (
-                  <StyledTableRow key={b} style={{ backgroundColor: color }}>
-                    <StyledTableCell component="th" scope="row">
-                      {item.type}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">{item.severity}</StyledTableCell>
-                    <StyledTableCell align="left">{item.message}</StyledTableCell>
-                  </StyledTableRow>
-                );
-              })}
-
-
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-
-
+          <Table className={classes.table} aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>Type</StyledTableCell>
+                <StyledTableCell align="right">Severity</StyledTableCell>
+                <StyledTableCell align="left">Message</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {filteredData
+                .map((item, index) => {
+                  return (
+                    <TableRowComponent key={index} type={item.type} severity={item.severity} message={item.message} color={getColor(item)} />
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </Grid>
+      </Grid>
     </div>
   );
-
 }
-// style = {{backgroundColor: item.severity === "success" ? "green" : item.severity === "warning" ?  "yellow" : "red" }}  
 
 export default Index
-

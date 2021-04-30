@@ -20,8 +20,8 @@
     "message": "click\t"
   },
   {
-    "type": "cons:info",
-    "severity": "success",
+    "type": "cons:error",
+    "severity": "error",
     "message": "Core,\nMessaging,\nMarking selected channel as read,\nsendbird_group_channel_55984334_0ba1ee55c31ac3c496af64880092190540457f6c"
   },
   {
@@ -30,8 +30,8 @@
     "message": "Core,\nMessaging,\nSendbird,\nGetting messages for channel,\nsendbird_group_channel_55984334_0ba1ee55c31ac3c496af64880092190540457f6c"
   },
   {
-    "type": "cons:info",
-    "severity": "success",
+    "type": "cons:fatal",
+    "severity": "fatal",
     "message": "Core,\nMessaging,\nFetching channel,\nsendbird_group_channel_55984334_0ba1ee55c31ac3c496af64880092190540457f6c"
   },
   {
