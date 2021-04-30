@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 
 export const useApiGet = () => {
 
+
     const [data, setData] = useState([]);
      
     const apiGet = () => {
@@ -15,6 +16,7 @@ export const useApiGet = () => {
                 function(err){
                   console.log(err, ' error')
                 });
+
 
     };
 
