@@ -9,10 +9,10 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 import TableRowComponent from './TableRow';
-import { getColor } from './TableRow/utils';
+// import { getColor } from './TableRow/utils';
 
 import { Checkbox, Grid, Typography } from '@material-ui/core';
-
+import { getColor } from './TableRow/utils';
 
 
 function Index() {
@@ -84,6 +84,14 @@ function Index() {
     setAppliedFilterType(old => [...old.filter((value) => value !== filter)])
   }
 
+  const onCheckboxChanged = (e, checked) => {
+    checked ? applyFilter(e.target.value) : removeFilter(e.target.value)
+  }
+
+  const onCheckboxChangedType = (e, checked) => {
+    checked ? applyFilterType(e.target.value) : removeFilterType(e.target.value)
+  }
+
   return (
     <div>
       <Grid container spacing={1} className="tableContainer">
@@ -95,9 +103,9 @@ function Index() {
           either way the appliedFilter state gets changed hence the second useEffect (iflterSearch function) gets triggered 
           and filteredData gets updated
           */}
-          <label>errors</label><Checkbox value='error' checked={appliedFilter.includes("error")} color="primary" onChange={(e, checked) => checked ? applyFilter(e.target.value) : removeFilter(e.target.value)}></Checkbox>
-          <label>warnings</label><Checkbox value='warning' checked={appliedFilter.includes("warning")} color="primary" onChange={(e, checked) => checked ? applyFilter(e.target.value) : removeFilter(e.target.value)}></Checkbox>
-          <label>successes</label><Checkbox value='success' checked={appliedFilter.includes("success")} color="primary" onChange={(e, checked) => checked ? applyFilter(e.target.value) : removeFilter(e.target.value)}></Checkbox>
+          <label>errors</label><Checkbox value='error' checked={appliedFilter.includes("error")} color="primary" onChange={onCheckboxChanged}></Checkbox>
+          <label>warnings</label><Checkbox value='warning' checked={appliedFilter.includes("warning")} color="primary" onChange={onCheckboxChanged}></Checkbox>
+          <label>successes</label><Checkbox value='success' checked={appliedFilter.includes("success")} color="primary" onChange={onCheckboxChanged}></Checkbox>
           {/* 
           onChange for the search field:
           search state gets changed and therefore the second useEffect (filterSearch function) gets triggered 
@@ -105,17 +113,12 @@ function Index() {
           */}
           <input type="text" placeholder="search here" onChange={e => setSearch(e.target.value)} />
 
-          <label>cy</label><Checkbox value="cy:" color="primary" checked={appliedFilterType.includes("cy:")} onChange={(e, checked) => checked ? applyFilterType(e.target.value) : removeFilterType(e.target.value)}></Checkbox>
-          <label>cons</label><Checkbox value="cons:" color="primary" checked={appliedFilterType.includes("cons:")} onChange={(e, checked) => checked ? applyFilterType(e.target.value) : removeFilterType(e.target.value)}></Checkbox>
+          <label>cy</label><Checkbox value="cy:" color="primary" checked={appliedFilterType.includes("cy:")} onChange={onCheckboxChangedType}></Checkbox>
+          <label>cons</label><Checkbox value="cons:" color="primary" checked={appliedFilterType.includes("cons:")} onChange={onCheckboxChangedType}></Checkbox>
         </Grid>
 
         <Grid item xs={12} className="tableBody">
-          <TableHead >
-            <TableRow>
-              <Typography variant="h6">lets the first user create a conversation</Typography>
-
-            </TableRow>
-          </TableHead>
+          <Typography >lets the first user create a conversation</Typography>
           <Table className={classes.table} aria-label="customized table">
             <TableHead>
               <TableRow>
