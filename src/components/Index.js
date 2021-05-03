@@ -41,15 +41,15 @@ function Index() {
   const filterSearch = (search) => {
     // first we filter data according to what is written in search input
     let searchResults = data;
-    let searched = search.toLowerCase();
+    search = search.toLowerCase();
 
     if (search !== "") {
       searchResults = searchResults.filter((item) => {
         let type = item.type.toLowerCase();
-        let message = item.message.toLowerCase(); 
-        let severity = item.severity.toLowerCase(); 
+        let message = item.message.toLowerCase();
+        let severity = item.severity.toLowerCase();
 
-        if (type.includes(searched) || message.includes(searched) || severity.includes(searched)) {
+        if (type.includes(search) || message.includes(search) || severity.includes(search)) {
           return item;
         }
       })
@@ -73,7 +73,7 @@ function Index() {
 
   const removeFilter = (filter) => {
     // we set the appliedFilter state to whatever it is minus the checkbox that was checked
-    setAppliedFilter(old => [...old.filter((value) => value !== filter)])
+    setAppliedFilter(old => old.filter((value) => value !== filter))
   }
 
   const applyFilterType = (filter) => {
@@ -83,9 +83,15 @@ function Index() {
 
   const removeFilterType = (filter) => {
     // we set the appliedFilterType state to whatever it is minus the checkbox that was checked
-    setAppliedFilterType(old => [...old.filter((value) => value !== filter)])
+    // setAppliedFilterType(old => [...old.filter((value) => value !== filter)])
+    setAppliedFilterType(old => old.filter((value) => value !== filter))
   }
 
+  //onChange for the checkboxes(ternary operator):if the checkbox gets activated it calls on the applyFilter() with 
+  //event target value otherwise it calls on the removeFilter() with event target value. either way the appliedFilter 
+  //or the appliedFilterType state gets changed hence the second useEffect (iflterSearch function) gets triggered and 
+  //filteredData gets updated
+          
   const onCheckboxChanged = (e, checked) => {
     checked ? applyFilter(e.target.value) : removeFilter(e.target.value)
   }
@@ -98,13 +104,7 @@ function Index() {
     <div>
       <Grid container spacing={1} className="tableContainer">
         <Grid item xs={12}>
-          {/* 
-          onChange for the checkboxes(ternary operator):
-          if the checkbox gets activated it calls on the applyFilter() with event target value
-          otherwise it calls on the removeFilter() with event target value 
-          either way the appliedFilter state gets changed hence the second useEffect (iflterSearch function) gets triggered 
-          and filteredData gets updated
-          */}
+
           <label>errors</label><Checkbox value='error' checked={appliedFilter.includes("error")} color="primary" onChange={onCheckboxChanged}></Checkbox>
           <label>warnings</label><Checkbox value='warning' checked={appliedFilter.includes("warning")} color="primary" onChange={onCheckboxChanged}></Checkbox>
           <label>successes</label><Checkbox value='success' checked={appliedFilter.includes("success")} color="primary" onChange={onCheckboxChanged}></Checkbox>
