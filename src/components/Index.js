@@ -41,13 +41,15 @@ function Index() {
   const filterSearch = (search) => {
     // first we filter data according to what is written in search input
     let searchResults = data;
+    let searched = search.toLowerCase();
 
     if (search !== "") {
       searchResults = searchResults.filter((item) => {
+        let type = item.type.toLowerCase();
+        let message = item.message.toLowerCase(); 
+        let severity = item.severity.toLowerCase(); 
 
-        if (item.type.toLowerCase().includes(search.toLowerCase())
-          || item.message.toLowerCase().includes(search.toLowerCase())
-          || item.severity.toLowerCase().includes(search.toLowerCase())) {
+        if (type.includes(searched) || message.includes(searched) || severity.includes(searched)) {
           return item;
         }
       })
