@@ -2,7 +2,7 @@ export const getColor = ({ type, severity }) => {
   //const {severity} = item;
   // const severity = item.severity;
 
-  if (type === "cons: info") {
+  if (type === "cons:info") {
     return "#87CEFA";
   }
 
