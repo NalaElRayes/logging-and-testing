@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+
 export const useApiGet = () => {
   const [data, setData] = useState([]);
 
@@ -7,17 +8,24 @@ export const useApiGet = () => {
     fetch("./test.json")
       .then((response) => response.json())
       .then((json) => {
-        console.log(json);
         setData(json);
+        console.log('fetched data: '+ data)
+        
       })
       .catch(function (err) {
         console.log(err, " error");
       });
   };
 
+  
+
+
+
   useEffect(() => {
     apiGet();
   }, []);
+
+
 
   return data;
 };

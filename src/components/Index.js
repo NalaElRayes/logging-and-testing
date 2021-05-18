@@ -26,6 +26,8 @@ function Index() {
   ]);
   const [appliedFilterType, setAppliedFilterType] = useState(["cy:", "cons:"]);
 
+  
+
   useEffect(() => {
     // this function runs whenever const data is changed
     // (useApiGet() has done its job and data is set to the fetched json)
@@ -70,7 +72,7 @@ function Index() {
         )
     );
   };
-
+   
   const applyFilter = (filter) => {
     // we set the appliedFilter state to whatever it is plus the value from the checkbox that was checked
     setAppliedFilter((old) => [...old, filter]);
@@ -185,7 +187,9 @@ function Index() {
           </Table>
         </Grid>
       </Grid>
+
     </div>
+    
   );
 }
 

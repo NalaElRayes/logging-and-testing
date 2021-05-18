@@ -25,7 +25,7 @@ const AppBarHeader = () => {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h5" className={classes.title}>
-            Testbot Browser Loggs
+            Testbot Loggs
           </Typography>
         </Toolbar>
       </AppBar>
