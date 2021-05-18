@@ -1,15 +1,19 @@
-export const getColor = ({ type }) => {
+export const getColor = ({ type, severity }) => {
   //const {severity} = item;
   // const severity = item.severity;
 
-  switch (type) {
-    case "cons:info":
+  if (type === "cons: info") {
+    return "#87CEFA";
+  }
+
+  switch (severity) {
+    case "info":
       return "#87CEFA";
-    case "cons:warn":
+    case "warning":
       return "yellow";
-    case "cons:error":
+    case "error":
       return "#ff000080";
-    case "cons:fatal":
+    case "fatal":
       return "#ff000080";
     default:
       return "";
