@@ -23,7 +23,6 @@ function Index() {
   const [appliedFilterType, setAppliedFilterType] = useState(["cy:", "cons:"]);
 
   const filterSearch = (search, logArray) => {
-    console.log("searching..." + search);
     // first we filter data according to what is written in search input
     let searchResults = logArray;
     search = search.toLowerCase();
@@ -70,6 +69,7 @@ function Index() {
   const removeFilter = (filter) => {
     // we set the appliedFilter state to whatever it is minus the checkbox that was checked
     setAppliedFilter((old) => old.filter((value) => value !== filter));
+    console.log("applied filter: " + appliedFilter);
   };
 
   const applyFilterType = (filter) => {
