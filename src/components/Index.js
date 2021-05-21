@@ -175,8 +175,16 @@ function Index() {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap>
-              Persistent drawer
+              Test Logs
             </Typography>
+            <Filter
+              search={search}
+              appliedFilter={appliedFilter}
+              appliedFilterType={appliedFilterType}
+              onSearchChange={(searchString) => setSearch(searchString)}
+              onCheckboxChanged={onCheckboxChanged}
+              onCheckboxChangedType={onCheckboxChangedType}
+            />
           </Toolbar>
         </AppBar>
         <Drawer
@@ -226,18 +234,7 @@ function Index() {
           })}
         >
           <div className={classesDrawer.drawerHeader} />
-          //tabell
           <Grid container spacing={1} className="tableContainer">
-            <Grid item xs={12}>
-              <Filter
-                search={search}
-                appliedFilter={appliedFilter}
-                appliedFilterType={appliedFilterType}
-                onSearchChange={(searchString) => setSearch(searchString)}
-                onCheckboxChanged={onCheckboxChanged}
-                onCheckboxChangedType={onCheckboxChangedType}
-              />
-            </Grid>
             <Grid item xs={12}>
               {Object.keys(data).map((fileName) => {
                 return (
@@ -246,7 +243,7 @@ function Index() {
                       // om data fileName, testname är tom (if) skriv ut ett message det finns inga tabeller.
                       const testLogArray = filterSearch(
                         search,
-                        testName,
+                        data[fileName][testName],
                         appliedFilter,
                         appliedFilterType
                       );
