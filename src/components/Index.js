@@ -174,7 +174,7 @@ function Index() {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap>
+            <Typography id="#top" variant="h6" noWrap>
               Test Logs
             </Typography>
             <Filter
@@ -207,25 +207,24 @@ function Index() {
           </div>
           <Divider />
           <List>
-            {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
+            {Object.keys(data).map((filename) =>
+              Object.keys(data[filename]).map((testName) => (
+                <ListItem
+                  button
+                  key={testName}
+                  component="a"
+                  href={`#${testName}`}
+                >
+                  <ListItemText primary={testName} />
+                </ListItem>
+              ))
+            )}
           </List>
           <Divider />
           <List>
-            {["All mail", "Trash", "Spam"].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
+            <ListItem button component="a" href={`#top`}>
+              <ListItemText primary={"to top"} />
+            </ListItem>
           </List>
         </Drawer>
         <main
@@ -247,12 +246,14 @@ function Index() {
                         appliedFilter,
                         appliedFilterType
                       );
-                      //om testLogArray innehåller testloggar rendera tabel om ej returnera en paragraph med text "det finns inga testloggar i denna tabel"
+                      //om testLogArray innehåller testloggar rendera tabel
                       if (Object.keys(testLogArray).length > 0) {
                         return (
                           <>
                             <Grid item xs={12} className="tableBody">
-                              <Typography variant="h6">{testName}</Typography>
+                              <Typography variant="h6" id={testName}>
+                                {testName}
+                              </Typography>
                               <Table
                                 className={classes.table}
                                 aria-label="customized table"

@@ -13,7 +13,7 @@ const TableRowComponent = ({ severity, message, type, color, ...rest }) => {
       </StyledTableCell>
       <StyledTableCell align="right">{severity}</StyledTableCell>
       <StyledTableCell align="left" style={{ backgroundColor: color }}>
-        {message}  
+        {message}
       </StyledTableCell>
     </StyledTableRow>
   );
