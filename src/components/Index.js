@@ -1,12 +1,36 @@
-import React, { useEffect, useState } from "react";
-// import data from "./1bubbleHistory.json";
-import { useStyles, StyledTableCell } from "./TableRow/styles";
+import React, { useState } from "react";
+import { useStyles1, StyledTableCell } from "./TableRow/styles";
+
+//Drawer and appbar import
+import clsx from "clsx";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
+import Drawer from "@material-ui/core/Drawer";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import List from "@material-ui/core/List";
+import Typography from "@material-ui/core/Typography";
+import Divider from "@material-ui/core/Divider";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import InboxIcon from "@material-ui/icons/MoveToInbox";
+import MailIcon from "@material-ui/icons/Mail";
+
+//Table import
+import TableContainer from "@material-ui/core/TableContainer";
+import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import { Grid, Typography } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import TableRowComponent from "./TableRow";
+
 import { getColor } from "./TableRow/utils";
 import { useApiGet } from "../hooks/useApiGet";
 import Filter from "./Filter";
@@ -14,7 +38,7 @@ import { filterSearch } from "./utils";
 
 function Index() {
   const data = useApiGet();
-  const classes = useStyles();
+  const classes = useStyles1();
   const [search, setSearch] = useState("");
   const [appliedFilter, setAppliedFilter] = useState([
     "warning",
@@ -55,84 +79,226 @@ function Index() {
     setAppliedFilterType((old) => old.filter((value) => value !== filter));
   };
 
+  //Drawer
+  const drawerWidth = 240;
+
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      display: "flex",
+    },
+    appBar: {
+      transition: theme.transitions.create(["margin", "width"], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+    },
+    appBarShift: {
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginLeft: drawerWidth,
+      transition: theme.transitions.create(["margin", "width"], {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+    },
+    menuButton: {
+      marginRight: theme.spacing(2),
+    },
+    hide: {
+      display: "none",
+    },
+    drawer: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
+    drawerPaper: {
+      width: drawerWidth,
+    },
+    drawerHeader: {
+      display: "flex",
+      alignItems: "center",
+      padding: theme.spacing(0, 1),
+      // necessary for content to be below app bar
+      ...theme.mixins.toolbar,
+      justifyContent: "flex-end",
+    },
+    content: {
+      flexGrow: 1,
+      padding: theme.spacing(3),
+      transition: theme.transitions.create("margin", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      marginLeft: -drawerWidth,
+    },
+    contentShift: {
+      transition: theme.transitions.create("margin", {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      marginLeft: 0,
+    },
+  }));
+
+  const classesDrawer = useStyles();
+  const theme = useTheme();
+  const [open, setOpen] = React.useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div>
-      <Grid container spacing={1} className="tableContainer">
-        <Grid item xs={12}>
-          <Filter
-            search={search}
-            appliedFilter={appliedFilter}
-            appliedFilterType={appliedFilterType}
-            onSearchChange={(searchString) => setSearch(searchString)}
-            onCheckboxChanged={onCheckboxChanged}
-            onCheckboxChangedType={onCheckboxChangedType}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          {Object.keys(data).map((fileName) => {
-            return (
-              <>
-                {Object.keys(data[fileName]).map((testName) => {
-                  // om data fileName, testname är tom (if) skriv ut ett message det finns inga tabeller.
-                  const testLogArray = filterSearch(
-                    search,
-                    data[fileName][testName],
-                    appliedFilter,
-                    appliedFilterType
-                  );
-
-                  console.log(testLogArray);
-                  console.log(typeof testLogArray);
-                  console.log(Object.keys(testLogArray).length);
-                  //om testLogArray innehåller testloggar rendera tabel om ej returnera en paragraph med text "det finns inga testloggar i denna tabel"
-                  if (Object.keys(testLogArray).length > 0) {
-                    return (
-                      <>
-                        <Grid item xs={12} className="tableBody">
-                          <Typography variant="h6">{testName}</Typography>
-                          <Table
-                            className={classes.table}
-                            aria-label="customized table"
-                          >
-                            <TableHead>
-                              <TableRow>
-                                <StyledTableCell>Type</StyledTableCell>
-                                <StyledTableCell align="right">
-                                  Severity
-                                </StyledTableCell>
-                                <StyledTableCell align="left">
-                                  Message
-                                </StyledTableCell>
-                              </TableRow>
-                            </TableHead>
-                            <TableBody>
-                              {testLogArray.map((testLog, index) => {
-                                const { type, severity, message } = testLog;
-
-                                return (
-                                  <TableRowComponent
-                                    key={index}
-                                    type={testLog.type}
-                                    severity={testLog.severity}
-                                    message={testLog.message}
-                                    color={getColor(testLog)}
-                                  />
-                                );
-                              })}
-                            </TableBody>
-                          </Table>
-                        </Grid>
-                      </>
-                    );
-                  } else {
-                    return null;
-                  }
-                })}
-              </>
-            );
+      <div className={classesDrawer.root}>
+        <CssBaseline />
+        <AppBar
+          position="fixed"
+          className={clsx(classesDrawer.appBar, {
+            [classesDrawer.appBarShift]: open,
           })}
-        </Grid>
-      </Grid>
+        >
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              className={clsx(
+                classesDrawer.menuButton,
+                open && classesDrawer.hide
+              )}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap>
+              Persistent drawer
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          className={classesDrawer.drawer}
+          variant="persistent"
+          anchor="left"
+          open={open}
+          classes={{
+            paper: classesDrawer.drawerPaper,
+          }}
+        >
+          <div className={classesDrawer.drawerHeader}>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === "ltr" ? (
+                <ChevronLeftIcon />
+              ) : (
+                <ChevronRightIcon />
+              )}
+            </IconButton>
+          </div>
+          <Divider />
+          <List>
+            {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+              <ListItem button key={text}>
+                <ListItemIcon>
+                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            ))}
+          </List>
+          <Divider />
+          <List>
+            {["All mail", "Trash", "Spam"].map((text, index) => (
+              <ListItem button key={text}>
+                <ListItemIcon>
+                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            ))}
+          </List>
+        </Drawer>
+        <main
+          className={clsx(classesDrawer.content, {
+            [classesDrawer.contentShift]: open,
+          })}
+        >
+          <div className={classesDrawer.drawerHeader} />
+          //tabell
+          <Grid container spacing={1} className="tableContainer">
+            <Grid item xs={12}>
+              <Filter
+                search={search}
+                appliedFilter={appliedFilter}
+                appliedFilterType={appliedFilterType}
+                onSearchChange={(searchString) => setSearch(searchString)}
+                onCheckboxChanged={onCheckboxChanged}
+                onCheckboxChangedType={onCheckboxChangedType}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              {Object.keys(data).map((fileName) => {
+                return (
+                  <>
+                    {Object.keys(data[fileName]).map((testName) => {
+                      // om data fileName, testname är tom (if) skriv ut ett message det finns inga tabeller.
+                      const testLogArray = filterSearch(
+                        search,
+                        testName,
+                        appliedFilter,
+                        appliedFilterType
+                      );
+                      //om testLogArray innehåller testloggar rendera tabel om ej returnera en paragraph med text "det finns inga testloggar i denna tabel"
+                      if (Object.keys(testLogArray).length > 0) {
+                        return (
+                          <>
+                            <Grid item xs={12} className="tableBody">
+                              <Typography variant="h6">{testName}</Typography>
+                              <Table
+                                className={classes.table}
+                                aria-label="customized table"
+                              >
+                                <TableHead>
+                                  <TableRow>
+                                    <StyledTableCell>Type</StyledTableCell>
+                                    <StyledTableCell align="right">
+                                      Severity
+                                    </StyledTableCell>
+                                    <StyledTableCell align="left">
+                                      Message
+                                    </StyledTableCell>
+                                  </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                  {testLogArray.map((testLog, index) => {
+                                    return (
+                                      <TableRowComponent
+                                        key={index}
+                                        type={testLog.type}
+                                        severity={testLog.severity}
+                                        message={testLog.message}
+                                        color={getColor(testLog)}
+                                      />
+                                    );
+                                  })}
+                                </TableBody>
+                              </Table>
+                            </Grid>
+                          </>
+                        );
+                      } else {
+                        return null;
+                      }
+                    })}
+                  </>
+                );
+              })}
+            </Grid>
+          </Grid>
+        </main>
+      </div>
     </div>
   );
 }

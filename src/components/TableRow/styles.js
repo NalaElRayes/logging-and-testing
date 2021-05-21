@@ -22,8 +22,9 @@ export const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-export const useStyles = makeStyles({
+export const useStyles1 = makeStyles({
   table: {
     minWidth: 650,
+    margin: "auto",
   },
 });
