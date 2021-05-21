@@ -174,7 +174,7 @@ function Index() {
             >
               <MenuIcon />
             </IconButton>
-            <Typography id="#top" variant="h6" noWrap>
+            <Typography id="#top" variant="h5" noWrap>
               Test Logs
             </Typography>
             <Filter
