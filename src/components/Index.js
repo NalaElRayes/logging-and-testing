@@ -8,8 +8,8 @@ import TableRow from "@material-ui/core/TableRow";
 import { Grid, Typography } from "@material-ui/core";
 import TableRowComponent from "./TableRow";
 import { getColor } from "./TableRow/utils";
-import { Checkbox } from "@material-ui/core";
 import { useApiGet } from "../hooks/useApiGet";
+import Filter from "./Filter";
 
 function Index() {
   const data = useApiGet();
@@ -87,113 +87,77 @@ function Index() {
     <div>
       <Grid container spacing={1} className="tableContainer">
         <Grid item xs={12}>
-          <label>errors</label>
-          <Checkbox
-            value="error"
-            checked={appliedFilter.includes("error")}
-            color="primary"
-            onChange={onCheckboxChanged}
-          ></Checkbox>
-          <label>warnings</label>
-          <Checkbox
-            value="warning"
-            checked={appliedFilter.includes("warning")}
-            color="primary"
-            onChange={onCheckboxChanged}
-          ></Checkbox>
-          <label>successes</label>
-          <Checkbox
-            value="success"
-            checked={appliedFilter.includes("success")}
-            color="primary"
-            onChange={onCheckboxChanged}
-          ></Checkbox>
-          {/* 
-          onChange for the search field:
-          search state gets changed and therefore the second useEffect (filterSearch function) gets triggered 
-          and filteredData gets updated
-          */}
-          <input
-            type="text"
-            placeholder="search here"
-            onChange={(e) => setSearch(e.target.value)}
+          <Filter
+            search={search}
+            appliedFilter={appliedFilter}
+            appliedFilterType={appliedFilterType}
+            onSearchChange={(searchString) => setSearch(searchString)}
+            onCheckboxChanged={onCheckboxChanged}
+            onCheckboxChangedType={onCheckboxChangedType}
           />
-
-          <label>cy</label>
-          <Checkbox
-            value="cy:"
-            color="primary"
-            checked={appliedFilterType.includes("cy:")}
-            onChange={onCheckboxChangedType}
-          ></Checkbox>
-          <label>cons</label>
-          <Checkbox
-            value="cons:"
-            color="primary"
-            checked={appliedFilterType.includes("cons:")}
-            onChange={onCheckboxChangedType}
-          ></Checkbox>
         </Grid>
-        {Object.keys(data).map((fileName) => {
-          return (
-            <>
-              {Object.keys(data[fileName]).map((testName) => {
-                // om data fileName, testname är tom (if) skriv ut ett message det finns inga tabeller.
-                const testLogArray = filterSearch(
-                  search,
-                  data[fileName][testName]
-                );
-
-                console.log(testLogArray);
-                console.log(typeof testLogArray);
-                console.log(Object.keys(testLogArray).length);
-                //om testLogArray innehåller testloggar rendera tabel om ej returnera en paragraph med text "det finns inga testloggar i denna tabel"
-                if (Object.keys(testLogArray).length > 0) {
-                  return (
-                    <>
-                      <Grid item xs={12} className="tableBody">
-                        <Typography variant="h6">{testName}</Typography>
-                        <Table
-                          className={classes.table}
-                          aria-label="customized table"
-                        >
-                          <TableHead>
-                            <TableRow>
-                              <StyledTableCell>Type</StyledTableCell>
-                              <StyledTableCell align="right">
-                                Severity
-                              </StyledTableCell>
-                              <StyledTableCell align="left">
-                                Message
-                              </StyledTableCell>
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                            {testLogArray.map((testLog, index) => {
-                              const { type, severity, message } = testLog;
-
-                              return (
-                                <TableRowComponent
-                                  key={index}
-                                  type={testLog.type}
-                                  severity={testLog.severity}
-                                  message={testLog.message}
-                                  color={getColor(testLog)}
-                                />
-                              );
-                            })}
-                          </TableBody>
-                        </Table>
-                      </Grid>
-                    </>
+        <Grid item xs={12}>
+          {Object.keys(data).map((fileName) => {
+            return (
+              <>
+                {Object.keys(data[fileName]).map((testName) => {
+                  // om data fileName, testname är tom (if) skriv ut ett message det finns inga tabeller.
+                  const testLogArray = filterSearch(
+                    search,
+                    data[fileName][testName]
                   );
-                } else {
-                  return null;
-                }
-              })}
-            </>
-          );
-        })}
+
+                  console.log(testLogArray);
+                  console.log(typeof testLogArray);
+                  console.log(Object.keys(testLogArray).length);
+                  //om testLogArray innehåller testloggar rendera tabel om ej returnera en paragraph med text "det finns inga testloggar i denna tabel"
+                  if (Object.keys(testLogArray).length > 0) {
+                    return (
+                      <>
+                        <Grid item xs={12} className="tableBody">
+                          <Typography variant="h6">{testName}</Typography>
+                          <Table
+                            className={classes.table}
+                            aria-label="customized table"
+                          >
+                            <TableHead>
+                              <TableRow>
+                                <StyledTableCell>Type</StyledTableCell>
+                                <StyledTableCell align="right">
+                                  Severity
+                                </StyledTableCell>
+                                <StyledTableCell align="left">
+                                  Message
+                                </StyledTableCell>
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              {testLogArray.map((testLog, index) => {
+                                const { type, severity, message } = testLog;
+
+                                return (
+                                  <TableRowComponent
+                                    key={index}
+                                    type={testLog.type}
+                                    severity={testLog.severity}
+                                    message={testLog.message}
+                                    color={getColor(testLog)}
+                                  />
+                                );
+                              })}
+                            </TableBody>
+                          </Table>
+                        </Grid>
+                      </>
+                    );
+                  } else {
+                    return null;
+                  }
+                })}
+              </>
+            );
+          })}
+        </Grid>
       </Grid>
     </div>
   );
