@@ -10,6 +10,7 @@ import TableRowComponent from "./TableRow";
 import { getColor } from "./TableRow/utils";
 import { useApiGet } from "../hooks/useApiGet";
 import Filter from "./Filter";
+import { filterSearch } from "./utils";
 
 function Index() {
   const data = useApiGet();
@@ -21,35 +22,6 @@ function Index() {
     "success",
   ]);
   const [appliedFilterType, setAppliedFilterType] = useState(["cy:", "cons:"]);
-
-  const filterSearch = (search, logArray) => {
-    // first we filter data according to what is written in search input
-    let searchResults = logArray;
-    search = search.toLowerCase();
-
-    if (search !== "") {
-      searchResults = searchResults.filter((testLog) => {
-        let type = testLog.type.toLowerCase();
-        let message = testLog.message.toLowerCase();
-        let severity = testLog.severity.toLowerCase();
-
-        if (
-          type.includes(search) ||
-          message.includes(search) ||
-          severity.includes(search)
-        ) {
-          return testLog;
-        }
-      });
-    }
-    return searchResults
-      .filter((testLog) => appliedFilter.includes(testLog.severity))
-      .filter((testLog) =>
-        appliedFilterType.some((filterType) =>
-          testLog.type.startsWith(filterType)
-        )
-      );
-  };
 
   const onCheckboxChanged = (e, checked) => {
     checked ? applyFilter(e.target.value) : removeFilter(e.target.value);
@@ -104,7 +76,9 @@ function Index() {
                   // om data fileName, testname är tom (if) skriv ut ett message det finns inga tabeller.
                   const testLogArray = filterSearch(
                     search,
-                    data[fileName][testName]
+                    data[fileName][testName],
+                    appliedFilter,
+                    appliedFilterType
                   );
 
                   console.log(testLogArray);
