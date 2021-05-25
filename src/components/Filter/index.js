@@ -132,4 +132,20 @@ const Filter = ({
   );
 };
 
+Filter.prototype = {
+  search: string,
+  appliedFilter: array,
+  appliedFilterType: array,
+  onSearchChange: func.isRequired,
+  onCheckboxChanged: func.isRequired,
+  onCheckboxChangedType: func.isRequired,
+};
+
+Filter.defaultProps = {
+  search: "",
+  appliedFilter: [],
+  appliedFilterType: [],
+  onSearchChange: () => {},
+};
+
 export default Filter;
