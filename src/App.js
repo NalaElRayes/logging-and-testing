@@ -1,18 +1,11 @@
-import './App.css';
-import 'fontsource-roboto';
-import Index from './components/Index';
-import AppBarHeader from './components/AppBar/appBar';
-
-
+import "./App.css";
+import "fontsource-roboto";
+import Index from "./components/Index";
 
 function App() {
   return (
     <div className="App">
-      <AppBarHeader />
-
       <Index />
-
-
     </div>
   );
 }

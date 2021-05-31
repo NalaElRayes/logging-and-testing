@@ -19,6 +19,7 @@ export const StyledTableRow = withStyles((theme) => ({
     "&:nth-of-type(odd)": {
       backgroundColor: theme.palette.action.hover,
     },
+    height: 30,
   },
 }))(TableRow);
 

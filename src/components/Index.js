@@ -172,7 +172,7 @@ function Index() {
               <MenuIcon />
             </IconButton>
             <Typography id="#top" variant="h5" noWrap>
-              Test Logs
+              Logviewer
             </Typography>
             <Filter
               search={search}
