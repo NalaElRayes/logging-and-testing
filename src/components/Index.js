@@ -26,6 +26,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { Grid } from "@material-ui/core";
+import ReactList from "react-list";
 import TableRowComponent from "./TableRow";
 
 import { getColor } from "./TableRow/utils";
@@ -243,6 +244,24 @@ function Index() {
                         appliedFilter,
                         appliedFilterType
                       );
+
+                      const renderTableRow = (index, key) => {
+                        const currentTestLog = testLogArray[index];
+                        return (
+                          <TableRowComponent
+                            key={key}
+                            type={currentTestLog.type}
+                            severity={currentTestLog.severity}
+                            message={currentTestLog.message}
+                            color={getColor(currentTestLog)}
+                          />
+                        );
+                      };
+
+                      const renderTableBody = (items, ref) => {
+                        return <TableBody ref={ref}>{items}</TableBody>;
+                      };
+
                       //om testLogArray innehåller testloggar rendera tabel
                       if (Object.keys(testLogArray).length > 0) {
                         return (
@@ -257,8 +276,9 @@ function Index() {
                               >
                                 <TableHead>
                                   <TableRow>
+                                    <StyledTableCell></StyledTableCell>
                                     <StyledTableCell>Type</StyledTableCell>
-                                    <StyledTableCell align="right">
+                                    <StyledTableCell align="left">
                                       Severity
                                     </StyledTableCell>
                                     <StyledTableCell align="left">
@@ -266,19 +286,13 @@ function Index() {
                                     </StyledTableCell>
                                   </TableRow>
                                 </TableHead>
-                                <TableBody>
-                                  {testLogArray.map((testLog, index) => {
-                                    return (
-                                      <TableRowComponent
-                                        key={index}
-                                        type={testLog.type}
-                                        severity={testLog.severity}
-                                        message={testLog.message}
-                                        color={getColor(testLog)}
-                                      />
-                                    );
-                                  })}
-                                </TableBody>
+                                <ReactList
+                                  itemRenderer={renderTableRow}
+                                  itemsRenderer={(items, ref) =>
+                                    renderTableBody(items, ref)
+                                  }
+                                  length={testLogArray.length}
+                                />
                               </Table>
                             </Grid>
                           </>
