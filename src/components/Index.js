@@ -185,6 +185,7 @@ function Index() {
             />
           </Toolbar>
         </AppBar>
+
         <Drawer
           className={classesDrawer.drawer}
           variant="persistent"
@@ -225,6 +226,7 @@ function Index() {
             </ListItem>
           </List>
         </Drawer>
+
         <main
           className={clsx(classesDrawer.content, {
             [classesDrawer.contentShift]: open,
