@@ -1,26 +1,11 @@
 import React, { useState } from "react";
 import { useStyles1, StyledTableCell } from "./TableRow/styles";
-
-//Drawer and appbar import
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import Drawer from "@material-ui/core/Drawer";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
 
-//Table import
-// import TableContainer from "@material-ui/core/TableContainer";
-// import Paper from "@material-ui/core/Paper";
+import DrawerComponent from "./Drawer";
+
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableHead from "@material-ui/core/TableHead";
@@ -31,8 +16,9 @@ import TableRowComponent from "./TableRow";
 
 import { getColor } from "./TableRow/utils";
 import { useApiGet } from "../hooks/useApiGet";
-import Filter from "./Filter";
+
 import { filterSearch } from "./utils";
+import AppBarComponent from "./Appbar";
 
 function Index() {
   const data = useApiGet();
@@ -152,80 +138,25 @@ function Index() {
   return (
     <div>
       <div className={classesDrawer.root}>
-        <CssBaseline />
-        <AppBar
-          position="fixed"
-          className={clsx(classesDrawer.appBar, {
-            [classesDrawer.appBarShift]: open,
-          })}
-        >
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              className={clsx(
-                classesDrawer.menuButton,
-                open && classesDrawer.hide
-              )}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography id="#top" variant="h5" noWrap>
-              Logviewer
-            </Typography>
-            <Filter
-              search={search}
-              appliedFilter={appliedFilter}
-              appliedFilterType={appliedFilterType}
-              onSearchChange={(searchString) => setSearch(searchString)}
-              onCheckboxChanged={onCheckboxChanged}
-              onCheckboxChangedType={onCheckboxChangedType}
-            />
-          </Toolbar>
-        </AppBar>
-
-        <Drawer
-          className={classesDrawer.drawer}
-          variant="persistent"
-          anchor="left"
+        <AppBarComponent
+          search={search}
+          setSearch={setSearch}
+          appliedFilter={appliedFilter}
+          appliedFilterType={appliedFilterType}
+          onCheckboxChanged={onCheckboxChanged}
+          onCheckboxChangedType={onCheckboxChangedType}
+          classesDrawer={classesDrawer}
           open={open}
-          classes={{
-            paper: classesDrawer.drawerPaper,
-          }}
-        >
-          <div className={classesDrawer.drawerHeader}>
-            <IconButton onClick={handleDrawerClose}>
-              {theme.direction === "ltr" ? (
-                <ChevronLeftIcon />
-              ) : (
-                <ChevronRightIcon />
-              )}
-            </IconButton>
-          </div>
-          <Divider />
-          <List>
-            {Object.keys(data).map((filename) =>
-              Object.keys(data[filename]).map((testName) => (
-                <ListItem
-                  button
-                  key={testName}
-                  component="a"
-                  href={`#${testName}`}
-                >
-                  <ListItemText primary={testName} />
-                </ListItem>
-              ))
-            )}
-          </List>
-          <Divider />
-          <List>
-            <ListItem button component="a" href={`#top`}>
-              <ListItemText primary={"to top"} />
-            </ListItem>
-          </List>
-        </Drawer>
+          handleDrawerOpen={handleDrawerOpen}
+        />
+
+        <DrawerComponent
+          classesDrawer={classesDrawer}
+          open={open}
+          handleDrawerClose={handleDrawerClose}
+          theme={theme}
+          data={data}
+        />
 
         <main
           className={clsx(classesDrawer.content, {
