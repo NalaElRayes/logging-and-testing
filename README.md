@@ -13,8 +13,8 @@ Search window for searching logs.
 
 ## Used Links
 
-[React List](https://www.npmjs.com/package/react-list)\
-
+[React List](https://www.npmjs.com/package/react-list)
+/
 [React doc](https://reactjs.org/docs/components-and-props.html)\
 \
 [Mdn Web Docs Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)\
