@@ -2,17 +2,14 @@
 
 ## Description
 
-This project renders different tests and there belonging loggs in a user friendly way. 
-As a user u can see all the loggs belonging to a test in a table. 
-Your able to filter logs by severity to show error, warnings and succes and also by type to show cypress logs and console logs. 
-Search window for searching logs. 
+This project renders different tests and there belonging loggs in a user friendly way.
+As a user u can see all the loggs belonging to a test in a table.
+Your able to filter logs by severity to show error, warnings and succes and also by type to show cypress logs and console logs.
+Search window for searching logs.
 
 ## Demo
 
-Use the app online at 
-
 ![2021-07-02 13 04 22](https://user-images.githubusercontent.com/54401398/124265533-190e0c00-db36-11eb-9713-28ad4c70cbe0.gif)
-
 
 ## Used Links
 
@@ -36,4 +33,3 @@ Opens at http://localhost:3000
 ### `npm test`
 
 Launches the test runner in the interactive watch mode.\
-
