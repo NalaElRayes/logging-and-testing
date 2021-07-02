@@ -44,5 +44,6 @@
   "devDependencies": {
     "cypress": "^7.4.0",
     "gh-pages": "^3.2.3"
-  }
+  },
+  "homepage": "https://nalaelrayes.github.io/logging-and-testing/"
 }
