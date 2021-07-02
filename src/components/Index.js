@@ -1,26 +1,17 @@
 import React, { useState } from "react";
 import { useStyles1, StyledTableCell } from "./TableRow/styles";
-
-//Drawer and appbar import
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import Drawer from "@material-ui/core/Drawer";
+
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
 
-//Table import
-// import TableContainer from "@material-ui/core/TableContainer";
-// import Paper from "@material-ui/core/Paper";
+import DrawerComponent from "./Drawer";
+
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableHead from "@material-ui/core/TableHead";
@@ -186,46 +177,13 @@ function Index() {
           </Toolbar>
         </AppBar>
 
-        <Drawer
-          className={classesDrawer.drawer}
-          variant="persistent"
-          anchor="left"
+        <DrawerComponent
+          classesDrawer={classesDrawer}
           open={open}
-          classes={{
-            paper: classesDrawer.drawerPaper,
-          }}
-        >
-          <div className={classesDrawer.drawerHeader}>
-            <IconButton onClick={handleDrawerClose}>
-              {theme.direction === "ltr" ? (
-                <ChevronLeftIcon />
-              ) : (
-                <ChevronRightIcon />
-              )}
-            </IconButton>
-          </div>
-          <Divider />
-          <List>
-            {Object.keys(data).map((filename) =>
-              Object.keys(data[filename]).map((testName) => (
-                <ListItem
-                  button
-                  key={testName}
-                  component="a"
-                  href={`#${testName}`}
-                >
-                  <ListItemText primary={testName} />
-                </ListItem>
-              ))
-            )}
-          </List>
-          <Divider />
-          <List>
-            <ListItem button component="a" href={`#top`}>
-              <ListItemText primary={"to top"} />
-            </ListItem>
-          </List>
-        </Drawer>
+          handleDrawerClose={handleDrawerClose}
+          theme={theme}
+          data={data}
+        />
 
         <main
           className={clsx(classesDrawer.content, {
