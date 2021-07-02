@@ -2,13 +2,7 @@ import React, { useState } from "react";
 import { useStyles1, StyledTableCell } from "./TableRow/styles";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-
-import CssBaseline from "@material-ui/core/CssBaseline";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
 
 import DrawerComponent from "./Drawer";
 
@@ -22,8 +16,9 @@ import TableRowComponent from "./TableRow";
 
 import { getColor } from "./TableRow/utils";
 import { useApiGet } from "../hooks/useApiGet";
-import Filter from "./Filter";
+
 import { filterSearch } from "./utils";
+import AppBarComponent from "./Appbar";
 
 function Index() {
   const data = useApiGet();
@@ -143,39 +138,17 @@ function Index() {
   return (
     <div>
       <div className={classesDrawer.root}>
-        <CssBaseline />
-        <AppBar
-          position="fixed"
-          className={clsx(classesDrawer.appBar, {
-            [classesDrawer.appBarShift]: open,
-          })}
-        >
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              className={clsx(
-                classesDrawer.menuButton,
-                open && classesDrawer.hide
-              )}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography id="#top" variant="h5" noWrap>
-              Logviewer
-            </Typography>
-            <Filter
-              search={search}
-              appliedFilter={appliedFilter}
-              appliedFilterType={appliedFilterType}
-              onSearchChange={(searchString) => setSearch(searchString)}
-              onCheckboxChanged={onCheckboxChanged}
-              onCheckboxChangedType={onCheckboxChangedType}
-            />
-          </Toolbar>
-        </AppBar>
+        <AppBarComponent
+          search={search}
+          setSearch={setSearch}
+          appliedFilter={appliedFilter}
+          appliedFilterType={appliedFilterType}
+          onCheckboxChanged={onCheckboxChanged}
+          onCheckboxChangedType={onCheckboxChangedType}
+          classesDrawer={classesDrawer}
+          open={open}
+          handleDrawerOpen={handleDrawerOpen}
+        />
 
         <DrawerComponent
           classesDrawer={classesDrawer}
